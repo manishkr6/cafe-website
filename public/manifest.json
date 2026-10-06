@@ -1,0 +1,16 @@
+{
+  "short_name": "Café Zéro",
+  "name": "Café Zéro · Gangtok",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FAF8F5",
+  "theme_color": "#2C241E",
+  "display": "standalone",
+  "orientation": "portrait"
+}

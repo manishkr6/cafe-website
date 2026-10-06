@@ -1,0 +1,12 @@
+[
+  {
+    "id": "enq_1791285189832_zu1978",
+    "name": "Aarav Tenzing",
+    "email": "aarav@tenzing.in",
+    "phone": "+91 98320 12345",
+    "enquiryType": "Table Reservation",
+    "message": "Reserving a window table overlooking Kanchenjunga ridge for 2 guests tomorrow morning at 9:00 AM.",
+    "status": "pending",
+    "createdAt": "2026-10-06T11:13:09.832Z"
+  }
+]

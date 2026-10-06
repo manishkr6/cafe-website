@@ -1,0 +1,6 @@
+{
+  "name": "Café Zéro – Gangtok, Sikkim",
+  "description": "A high-end contemporary café nestled above the clouds in Gangtok, Sikkim. Artisanal specialty coffee, farm-to-table cuisine, mountain views, and quiet luxury.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
