@@ -136,7 +136,7 @@ export default function EnquiryForm({ onSuccess, initialType = 'General Enquiry'
       const res = await submitEnquiry(submissionData);
       setStatus({
         type: 'success',
-        message: res.message || 'Thank you! Your order & enquiry has been dispatched directly via Web3Forms.',
+        message: res.message || 'Thank you! Your enquiry has been received.',
         warning: res.warning
       });
       setFormData({
@@ -150,7 +150,7 @@ export default function EnquiryForm({ onSuccess, initialType = 'General Enquiry'
     } catch (err) {
       setStatus({
         type: 'error',
-        message: err.message || 'Failed to dispatch via Web3Forms. Please retry or message us on WhatsApp.'
+        message: 'Something went wrong while sending your request. Please try again or reach out on WhatsApp.'
       });
     } finally {
       setLoading(false);
@@ -215,7 +215,7 @@ export default function EnquiryForm({ onSuccess, initialType = 'General Enquiry'
           <div className="space-y-1">
             <p className="font-serif text-lg font-normal">{status.message}</p>
             <p className="text-xs text-emerald-700 dark:text-emerald-300/80">
-              Delivered directly to our email via Web3Forms. Our team at Gangtok will confirm your order and timing promptly.
+              Our team at Gangtok will review your request and confirm with you promptly.
             </p>
           </div>
         </div>
@@ -335,7 +335,7 @@ export default function EnquiryForm({ onSuccess, initialType = 'General Enquiry'
       <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-xs text-[#78716C] dark:text-[#A8A29E]">
           <ShieldCheck className="w-3.5 h-3.5 text-[#C29B38]" />
-          <span>Serverless direct dispatch via Web3Forms</span>
+          <span>Direct &amp; secure delivery</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -363,8 +363,8 @@ export default function EnquiryForm({ onSuccess, initialType = 'General Enquiry'
 
       {/* Footer Info */}
       <div className="pt-2 border-t border-[#1C1917]/10 dark:border-[#FAF8F5]/10 flex items-center justify-between text-[11px] text-[#78716C] dark:text-[#A8A29E]">
-        <span>Zero backend database required</span>
-        <span>Delivered securely via Web3Forms</span>
+        <span>Ridge View Arcade · Gangtok, Sikkim</span>
+        <span>Dedicated Guest Concierge</span>
       </div>
     </form>
   );

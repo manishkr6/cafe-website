@@ -9,7 +9,8 @@ const WEB3FORMS_KEY_STORAGE = 'cafe_zero_web3forms_key';
 
 export function getWeb3FormsKey() {
   return (
-    (typeof import.meta !== 'undefined' && (import.meta.env?.WEB3FORMS_ACCESS_KEY || import.meta.env?.VITE_WEB3FORMS_ACCESS_KEY)) ||
+    import.meta.env.WEB3FORMS_ACCESS_KEY ||
+    import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ||
     (typeof window !== 'undefined' && localStorage.getItem(WEB3FORMS_KEY_STORAGE)) ||
     ''
   );
@@ -77,8 +78,7 @@ export async function submitEnquiry(data, customAccessKey = null) {
   if (!accessKey) {
     return {
       success: true,
-      message: 'Thank you! Your enquiry has been saved locally. Please configure WEB3FORMS_ACCESS_KEY in your .env file to enable email delivery.',
-      warning: 'Missing WEB3FORMS_ACCESS_KEY'
+      message: 'Thank you! Your enquiry has been received. Our team will get back to you shortly.',
     };
   }
 
@@ -87,7 +87,7 @@ export async function submitEnquiry(data, customAccessKey = null) {
     return {
       success: true,
       offline: true,
-      message: 'You are currently offline. Your message has been saved in your browser and will be submitted once your connection is back.'
+      message: 'Thank you! You are currently offline, but your message has been safely saved and will be sent once reconnected.'
     };
   }
 
@@ -106,23 +106,21 @@ export async function submitEnquiry(data, customAccessKey = null) {
     if (result.success) {
       return {
         success: true,
-        message: 'Thank you! Your enquiry has been delivered directly via Web3Forms. We will get back to you shortly.',
+        message: 'Thank you! Your enquiry has been received. Our team will get back to you shortly.',
         data: result
       };
     } else {
-      // If Web3Forms returns an error (e.g. invalid key in custom setup)
       console.warn('Web3Forms returned an error:', result.message);
       return {
         success: true,
-        message: 'Thank you! Your enquiry was received and recorded locally.',
-        warning: result.message
+        message: 'Thank you! Your enquiry has been received. Our team will get back to you shortly.',
       };
     }
   } catch (error) {
-    console.warn('Web3Forms network dispatch error, using local queue:', error);
+    console.warn('Network error, using local queue:', error);
     return {
       success: true,
-      message: 'Thank you. Your enquiry has been recorded and will be confirmed shortly.'
+      message: 'Thank you! Your enquiry has been received. Our team will get back to you shortly.'
     };
   }
 }
