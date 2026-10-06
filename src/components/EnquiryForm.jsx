@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { submitEnquiry, getWeb3FormsKey, saveWeb3FormsKey } from '../lib/api.js';
+import { submitEnquiry } from '../lib/api.js';
 import Button from './Button.jsx';
 import {
   CheckCircle2,
@@ -8,9 +8,7 @@ import {
   Loader2,
   Send,
   MessageCircle,
-  KeyRound,
   ShieldCheck,
-  ExternalLink,
   Coffee,
   X
 } from 'lucide-react';
@@ -66,13 +64,6 @@ export default function EnquiryForm({ onSuccess, initialType = 'General Enquiry'
 
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ type: null, message: '', warning: null });
-  const [showKeyConfig, setShowKeyConfig] = useState(false);
-  const [customKey, setCustomKey] = useState('');
-  const [savedKeyNotice, setSavedKeyNotice] = useState(false);
-
-  useEffect(() => {
-    setCustomKey(getWeb3FormsKey());
-  }, []);
 
   // Update form if selectedItem changes
   useEffect(() => {
@@ -104,15 +95,6 @@ export default function EnquiryForm({ onSuccess, initialType = 'General Enquiry'
     }
   };
 
-  const handleSaveKey = (e) => {
-    e.preventDefault();
-    saveWeb3FormsKey(customKey);
-    setSavedKeyNotice(true);
-    setTimeout(() => {
-      setSavedKeyNotice(false);
-      setShowKeyConfig(false);
-    }, 1500);
-  };
 
   const handleClearItem = () => {
     setSelectedItem(null);
@@ -151,7 +133,7 @@ export default function EnquiryForm({ onSuccess, initialType = 'General Enquiry'
         orderedItem: selectedItem ? `${selectedItem.name} (₹${selectedItem.price || ''})` : null
       };
 
-      const res = await submitEnquiry(submissionData, customKey);
+      const res = await submitEnquiry(submissionData);
       setStatus({
         type: 'success',
         message: res.message || 'Thank you! Your order & enquiry has been dispatched directly via Web3Forms.',
@@ -379,55 +361,11 @@ export default function EnquiryForm({ onSuccess, initialType = 'General Enquiry'
         </div>
       </div>
 
-      {/* Web3Forms Access Key Setting */}
+      {/* Footer Info */}
       <div className="pt-2 border-t border-[#1C1917]/10 dark:border-[#FAF8F5]/10 flex items-center justify-between text-[11px] text-[#78716C] dark:text-[#A8A29E]">
-        <span>Zero backend setup required</span>
-        <button
-          type="button"
-          onClick={() => setShowKeyConfig(!showKeyConfig)}
-          className="hover:text-[#C29B38] transition-colors inline-flex items-center gap-1 underline cursor-pointer"
-        >
-          <KeyRound className="w-3 h-3" />
-          <span>{showKeyConfig ? 'Hide Web3Forms Key' : 'Configure Web3Forms Key'}</span>
-        </button>
+        <span>Zero backend database required</span>
+        <span>Delivered securely via Web3Forms</span>
       </div>
-
-      {showKeyConfig && (
-        <div className="p-4 bg-[#FAF8F5] dark:bg-[#1C1815] border border-[#C29B38]/30 rounded-xs space-y-2.5 text-xs animate-fadeIn">
-          <div className="flex items-center justify-between">
-            <span className="font-semibold text-[#C29B38] uppercase tracking-wider text-[11px]">
-              Web3Forms Access Key
-            </span>
-            <a
-              href="https://web3forms.com"
-              target="_blank"
-              rel="noreferrer"
-              className="text-[10px] text-[#78716C] dark:text-[#A8A29E] hover:text-[#C29B38] inline-flex items-center gap-1 underline"
-            >
-              Get free key at web3forms.com <ExternalLink className="w-2.5 h-2.5" />
-            </a>
-          </div>
-          <p className="text-[11px] text-[#78716C] dark:text-[#A8A29E]">
-            Paste your Web3Forms access key below to route all submissions straight to your email without any backend server.
-          </p>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={customKey}
-              onChange={(e) => setCustomKey(e.target.value)}
-              placeholder="e.g. xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-              className="flex-1 bg-white dark:bg-[#12100E] border border-[#1C1917]/20 dark:border-[#FAF8F5]/20 px-3 py-1.5 text-xs rounded-xs font-mono"
-            />
-            <button
-              type="button"
-              onClick={handleSaveKey}
-              className="px-4 py-1.5 bg-[#C29B38] text-[#12100E] font-medium uppercase tracking-wider text-[11px] hover:opacity-90 cursor-pointer"
-            >
-              {savedKeyNotice ? 'SAVED!' : 'SAVE KEY'}
-            </button>
-          </div>
-        </div>
-      )}
     </form>
   );
 }
