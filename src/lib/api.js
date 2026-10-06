@@ -9,7 +9,7 @@ const WEB3FORMS_KEY_STORAGE = 'cafe_zero_web3forms_key';
 
 export function getWeb3FormsKey() {
   return (
-    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_WEB3FORMS_ACCESS_KEY) ||
+    (typeof import.meta !== 'undefined' && (import.meta.env?.WEB3FORMS_ACCESS_KEY || import.meta.env?.VITE_WEB3FORMS_ACCESS_KEY)) ||
     (typeof window !== 'undefined' && localStorage.getItem(WEB3FORMS_KEY_STORAGE)) ||
     ''
   );
@@ -77,8 +77,8 @@ export async function submitEnquiry(data, customAccessKey = null) {
   if (!accessKey) {
     return {
       success: true,
-      message: 'Thank you! Your enquiry has been saved locally. Please configure VITE_WEB3FORMS_ACCESS_KEY in your .env file to enable email delivery.',
-      warning: 'Missing VITE_WEB3FORMS_ACCESS_KEY'
+      message: 'Thank you! Your enquiry has been saved locally. Please configure WEB3FORMS_ACCESS_KEY in your .env file to enable email delivery.',
+      warning: 'Missing WEB3FORMS_ACCESS_KEY'
     };
   }
 
