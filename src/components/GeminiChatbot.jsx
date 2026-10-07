@@ -12,7 +12,9 @@ import {
   Clock,
   Calendar,
   Minimize2,
-  Maximize2
+  Maximize2,
+  Sparkles,
+  Bot
 } from 'lucide-react';
 import { menuItems } from '../data/menu.js';
 import { siteConfig } from '../data/site.js';
@@ -48,7 +50,7 @@ const INITIAL_MESSAGES = [
   {
     id: 'init-1',
     role: 'model',
-    text: "Tashi Delek! Welcome to Café Zéro. I am your barista companion and mountain host at 5,800 ft elevation. Whether you are curious about our calibrated single-origin pour-overs, planning a slow morning breakfast, or reserving a ridge terrace seat, how may I assist you today?",
+    text: "Tashi Delek! Welcome to Café Zéro. I am your AI Barista and mountain concierge at 5,800 ft elevation. Whether you are curious about our calibrated single-origin pour-overs, planning a slow morning breakfast, or reserving a ridge terrace seat, how may I assist you today?",
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     recommendedItem: menuItems.find((m) => m.id === 'c-2')
   },
@@ -249,36 +251,42 @@ export default function GeminiChatbot() {
 
   return (
     <>
-      {/* Floating Trigger Button (Bottom-Right) - Bespoke Mountain Hospitality Desk */}
+      {/* Floating Trigger Button (Bottom-Right) - Circular AI Barista Widget */}
       {!isOpen && (
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          aria-label="Open Café Zéro Barista & Guest Desk"
-          className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 px-4 py-2.5 bg-[#FAF8F5]/95 dark:bg-[#161311]/95 text-[#1C1917] dark:text-[#FAF8F5] backdrop-blur-md border border-[#1C1917]/15 dark:border-[#FAF8F5]/15 shadow-xl hover:border-[#C29B38] dark:hover:border-[#C29B38] hover:shadow-2xl transition-all duration-300 cursor-pointer group"
-        >
-          {/* Active status & emblem */}
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-500 shadow-xs" />
-            <Coffee className="w-4 h-4 text-[#C29B38] group-hover:scale-110 transition-transform" />
-          </div>
+        <div className="fixed bottom-10 right-6 sm:bottom-12 sm:right-10 z-40">
+          {/* Main Circular AI Floating Button */}
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            aria-label="Open AI Barista Chat"
+            className="relative group w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none"
+          >
+            {/* Ambient Breathing AI Halo */}
+            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#C29B38] via-amber-400 to-[#C29B38] opacity-60 blur-sm group-hover:opacity-100 group-hover:blur-md transition-all duration-500 animate-pulse" />
 
-          {/* Typography */}
-          <div className="flex flex-col text-left">
-            <span className="text-xs font-serif font-light tracking-[0.14em] uppercase text-[#1C1917] dark:text-[#FAF8F5]">
-              Ask Our Barista
-            </span>
-            <span className="text-[9px] tracking-widest uppercase text-[#78716C] dark:text-[#A8A29E] font-mono -mt-0.5">
-              5,800 ft · Guest Desk
-            </span>
-          </div>
+            {/* Circular Avatar Container with Border Glow */}
+            <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-[#C29B38] shadow-2xl bg-[#1C1815] flex items-center justify-center">
+              <img
+                src="/ai-avatar.jpg"
+                alt="Café Zéro AI Barista"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/20" />
+            </div>
 
-          {/* Divider & Arrow */}
-          <span className="w-[1px] h-3.5 bg-[#1C1917]/15 dark:border-[#FAF8F5]/15 ml-0.5" />
-          <span className="text-[10px] text-[#C29B38] font-mono font-medium tracking-wider uppercase group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
-            Desk <ChevronRight className="w-3 h-3" />
-          </span>
-        </button>
+            {/* Live Green Status Indicator */}
+            <span className="absolute top-0.5 left-0.5 flex h-3.5 w-3.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-[#FAF8F5] dark:border-[#161311]" />
+            </span>
+
+            {/* Sparkling AI Badge Pill */}
+            <span className="absolute bottom-0 right-0 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-[#C29B38] to-[#8C6B1B] text-white text-[9px] font-bold font-mono tracking-wider flex items-center gap-0.5 shadow-md border border-[#FAF8F5]/40 group-hover:scale-105 transition-transform">
+              <Sparkles className="w-2.5 h-2.5 fill-current" />
+              <span>AI</span>
+            </span>
+          </button>
+        </div>
       )}
 
       {/* Slide-Up Chat Window */}
@@ -286,8 +294,8 @@ export default function GeminiChatbot() {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Café Zéro Barista & Guest Desk"
-          className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col bg-[#FAF8F5] dark:bg-[#161311] border border-[#1C1917]/15 dark:border-[#FAF8F5]/15 shadow-2xl transition-all duration-300 overflow-hidden ${
+          aria-label="Café Zéro AI Barista & Guest Desk"
+          className={`fixed bottom-6 right-4 sm:bottom-10 sm:right-10 z-50 flex flex-col bg-[#FAF8F5] dark:bg-[#161311] border border-[#1C1917]/15 dark:border-[#FAF8F5]/15 shadow-2xl transition-all duration-300 overflow-hidden ${
             isExpanded
               ? 'w-[calc(100vw-32px)] sm:w-[680px] h-[85vh] max-w-2xl'
               : 'w-[calc(100vw-32px)] sm:w-[420px] md:w-[450px] h-[580px] max-h-[85vh]'
@@ -296,15 +304,22 @@ export default function GeminiChatbot() {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 bg-[#1C1815] text-[#FAF8F5] border-b border-[#FAF8F5]/10 shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xs bg-[#C29B38]/20 border border-[#C29B38]/40 flex items-center justify-center text-[#C29B38] shrink-0">
-                <Coffee className="w-4 h-4" />
+              <div className="relative w-9 h-9 rounded-full overflow-hidden border border-[#C29B38] shadow-sm shrink-0">
+                <img
+                  src="/ai-avatar.jpg"
+                  alt="AI Barista"
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border border-[#1C1815]" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-serif text-sm font-light tracking-[0.08em] text-[#FAF8F5]">
-                    CAFÉ ZÉRO · GUEST DESK
+                    CAFÉ ZÉRO · AI BARISTA
                   </h3>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span className="px-1.5 py-0.2 bg-[#C29B38]/30 border border-[#C29B38]/50 text-[#FAF8F5] text-[9px] font-mono tracking-wider uppercase rounded-full flex items-center gap-1 font-semibold">
+                    <Sparkles className="w-2.5 h-2.5 text-[#C29B38]" /> AI
+                  </span>
                 </div>
                 <p className="text-[10px] text-[#FAF8F5]/60 font-mono tracking-wider -mt-0.5">
                   Live from Gangtok Ridge · 5,800 ft
@@ -387,7 +402,18 @@ export default function GeminiChatbot() {
                   className={`flex flex-col ${isGuest ? 'items-end' : 'items-start'} space-y-1.5 animate-fadeIn`}
                 >
                   <div className="flex items-center gap-2 px-1 text-[9px] text-[#78716C] dark:text-[#A8A29E] font-mono uppercase tracking-wider">
-                    <span>{isGuest ? 'You' : 'Barista & Mountain Host'}</span>
+                    {!isGuest ? (
+                      <span className="flex items-center gap-1.5">
+                        <img
+                          src="/ai-avatar.jpg"
+                          alt="AI Barista"
+                          className="w-4 h-4 rounded-full object-cover border border-[#C29B38]/60 inline-block"
+                        />
+                        <span className="font-medium text-[#C29B38] dark:text-[#E5C158]">AI Barista</span>
+                      </span>
+                    ) : (
+                      <span>You</span>
+                    )}
                     <span>·</span>
                     <span>{msg.timestamp}</span>
                   </div>
