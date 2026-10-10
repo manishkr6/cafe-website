@@ -81,7 +81,7 @@ export function initHeroAnimation(containerRef, elements) {
         1.4
       );
     }
-  }, containerRef);
+  }, containerRef.current);
 
   return () => ctx.revert();
 }

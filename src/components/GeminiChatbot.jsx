@@ -93,6 +93,9 @@ export default function GeminiChatbot() {
   // Quick navigation to table reservations
   const handleReserveTable = () => {
     setIsOpen(false);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     navigate('/contact');
   };
 
@@ -253,13 +256,13 @@ export default function GeminiChatbot() {
     <>
       {/* Floating Trigger Button (Bottom-Right) - Circular AI Barista Widget */}
       {!isOpen && (
-        <div className="fixed bottom-10 right-6 sm:bottom-12 sm:right-10 z-40">
+        <div className="fixed bottom-5 right-4 sm:bottom-12 sm:right-10 z-40">
           {/* Main Circular AI Floating Button */}
           <button
             type="button"
             onClick={() => setIsOpen(true)}
             aria-label="Open AI Barista Chat"
-            className="relative group w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none"
+            className="relative group w-13 h-13 sm:w-16 sm:h-16 rounded-full flex items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none"
           >
             {/* Ambient Breathing AI Halo */}
             <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#C29B38] via-amber-400 to-[#C29B38] opacity-60 blur-sm group-hover:opacity-100 group-hover:blur-md transition-all duration-500 animate-pulse" />
@@ -295,16 +298,16 @@ export default function GeminiChatbot() {
           role="dialog"
           aria-modal="true"
           aria-label="Café Zéro AI Barista & Guest Desk"
-          className={`fixed bottom-6 right-4 sm:bottom-10 sm:right-10 z-50 flex flex-col bg-[#FAF8F5] dark:bg-[#161311] border border-[#1C1917]/15 dark:border-[#FAF8F5]/15 shadow-2xl transition-all duration-300 overflow-hidden ${
+          className={`fixed inset-x-3 bottom-3 sm:inset-auto sm:bottom-10 sm:right-10 z-50 flex flex-col bg-[#FAF8F5] dark:bg-[#161311] border border-[#1C1917]/15 dark:border-[#FAF8F5]/15 shadow-2xl transition-all duration-300 overflow-hidden ${
             isExpanded
-              ? 'w-[calc(100vw-32px)] sm:w-[680px] h-[85vh] max-w-2xl'
-              : 'w-[calc(100vw-32px)] sm:w-[420px] md:w-[450px] h-[580px] max-h-[85vh]'
+              ? 'w-auto sm:w-[680px] h-[85dvh] max-w-2xl'
+              : 'w-auto sm:w-[420px] md:w-[450px] h-[82dvh] sm:h-[580px] max-h-[88dvh]'
           }`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#1C1815] text-[#FAF8F5] border-b border-[#FAF8F5]/10 shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="relative w-9 h-9 rounded-full overflow-hidden border border-[#C29B38] shadow-sm shrink-0">
+          <div className="flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 bg-[#1C1815] text-[#FAF8F5] border-b border-[#FAF8F5]/10 shrink-0">
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border border-[#C29B38] shadow-sm shrink-0">
                 <img
                   src="/ai-avatar.jpg"
                   alt="AI Barista"
@@ -312,23 +315,23 @@ export default function GeminiChatbot() {
                 />
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border border-[#1C1815]" />
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="font-serif text-sm font-light tracking-[0.08em] text-[#FAF8F5]">
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <h3 className="font-serif text-xs sm:text-sm font-light tracking-[0.08em] text-[#FAF8F5] truncate">
                     CAFÉ ZÉRO · AI BARISTA
                   </h3>
-                  <span className="px-1.5 py-0.2 bg-[#C29B38]/30 border border-[#C29B38]/50 text-[#FAF8F5] text-[9px] font-mono tracking-wider uppercase rounded-full flex items-center gap-1 font-semibold">
+                  <span className="px-1.5 py-0.2 bg-[#C29B38]/30 border border-[#C29B38]/50 text-[#FAF8F5] text-[9px] font-mono tracking-wider uppercase rounded-full flex items-center gap-1 font-semibold shrink-0">
                     <Sparkles className="w-2.5 h-2.5 text-[#C29B38]" /> AI
                   </span>
                 </div>
-                <p className="text-[10px] text-[#FAF8F5]/60 font-mono tracking-wider -mt-0.5">
+                <p className="text-[9px] sm:text-[10px] text-[#FAF8F5]/60 font-mono tracking-wider -mt-0.5 truncate">
                   Live from Gangtok Ridge · 5,800 ft
                 </p>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
               <a
                 href={siteConfig.location.whatsappUrl}
                 target="_blank"
@@ -362,11 +365,11 @@ export default function GeminiChatbot() {
 
           {/* Quick Inquiries (Shown on fresh desk) */}
           {messages.length <= 2 && (
-            <div className="p-3.5 bg-[#F3EFEA] dark:bg-[#1E1916] border-b border-[#1C1917]/10 dark:border-[#FAF8F5]/10 shrink-0">
+            <div className="p-3 sm:p-3.5 bg-[#F3EFEA] dark:bg-[#1E1916] border-b border-[#1C1917]/10 dark:border-[#FAF8F5]/10 shrink-0">
               <span className="text-[9px] font-mono tracking-[0.2em] uppercase text-[#78716C] dark:text-[#A8A29E] block mb-2">
                 Quick Inquiries · Tap to Ask
               </span>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 xs:grid-cols-2 gap-2">
                 {QUICK_INQUIRIES.map((item, idx) => {
                   const Icon = item.icon;
                   return (
@@ -432,7 +435,7 @@ export default function GeminiChatbot() {
 
                     {/* Rich Interactive Action: Embedded Menu Item Card */}
                     {msg.recommendedItem && (
-                      <div className="mt-3.5 pt-3 border-t border-[#1C1917]/10 dark:border-[#FAF8F5]/10 flex items-center justify-between gap-3 bg-[#FAF8F5] dark:bg-[#14110F] p-2.5 rounded-xs">
+                      <div className="mt-3.5 pt-3 border-t border-[#1C1917]/10 dark:border-[#FAF8F5]/10 flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-2.5 bg-[#FAF8F5] dark:bg-[#14110F] p-2.5 rounded-xs">
                         <div className="flex items-center gap-2.5 min-w-0">
                           <img
                             src={msg.recommendedItem.image}
@@ -452,7 +455,7 @@ export default function GeminiChatbot() {
                         <button
                           type="button"
                           onClick={() => handleOrderItem(msg.recommendedItem)}
-                          className="px-2.5 py-1.5 bg-[#C29B38] hover:bg-[#d4af37] text-[#1C1815] text-[10px] tracking-wider uppercase font-medium whitespace-nowrap transition-colors flex items-center gap-1 rounded-xs cursor-pointer shrink-0"
+                          className="px-2.5 py-1.5 bg-[#C29B38] hover:bg-[#d4af37] text-[#1C1815] text-[10px] tracking-wider uppercase font-medium whitespace-nowrap transition-colors flex items-center justify-center gap-1 rounded-xs cursor-pointer shrink-0"
                         >
                           <span>Order &amp; Message</span>
                           <ArrowRight className="w-2.5 h-2.5" />
@@ -462,14 +465,14 @@ export default function GeminiChatbot() {
 
                     {/* Table Reservation Action */}
                     {msg.hasReservationAction && (
-                      <div className="mt-3 pt-3 border-t border-[#1C1917]/10 dark:border-[#FAF8F5]/10 flex items-center justify-between gap-2">
+                      <div className="mt-3 pt-3 border-t border-[#1C1917]/10 dark:border-[#FAF8F5]/10 flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2">
                         <span className="text-[10px] text-[#78716C] dark:text-[#A8A29E]">
                           Table reservations accepted online
                         </span>
                         <button
                           type="button"
                           onClick={handleReserveTable}
-                          className="px-3 py-1 border border-[#C29B38] text-[#C29B38] hover:bg-[#C29B38] hover:text-[#1C1815] text-[10px] uppercase tracking-wider font-medium transition-colors rounded-xs cursor-pointer"
+                          className="w-full xs:w-auto px-3 py-1 border border-[#C29B38] text-[#C29B38] hover:bg-[#C29B38] hover:text-[#1C1815] text-[10px] uppercase tracking-wider font-medium transition-colors rounded-xs cursor-pointer text-center"
                         >
                           Reserve a Table
                         </button>

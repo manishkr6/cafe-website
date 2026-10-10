@@ -163,7 +163,7 @@ export default function AmbientSoundToggle({ variant = 'nav', className = '' }) 
             : `Play ${soundMode === 'mountain' ? 'mountain wind' : 'coffee'} sound`
         }
         aria-label={isPlaying ? "Mute ambient sound" : "Play ambient sound"}
-        className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 text-xs sm:text-[12.5px] tracking-wider uppercase transition-all rounded-sm cursor-pointer border ${
+        className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-[12.5px] tracking-wider uppercase transition-all rounded-sm cursor-pointer border ${
           isPlaying
             ? 'border-[#C29B38]/50 bg-[#C29B38]/10 text-[#C29B38] font-medium shadow-sm'
             : 'border-transparent text-[#78716C] dark:text-[#A8A29E] hover:text-[#1C1917] dark:hover:text-[#FAF8F5] hover:bg-black/5 dark:hover:bg-white/5'
@@ -184,9 +184,9 @@ export default function AmbientSoundToggle({ variant = 'nav', className = '' }) 
         ) : (
           <>
             {soundMode === 'mountain' ? (
-              <Wind className="w-4 h-4 opacity-75 shrink-0" />
+              <Wind className="w-3.5 h-3.5 sm:w-4 sm:h-4 opacity-75 shrink-0" />
             ) : (
-              <VolumeX className="w-4 h-4 opacity-75 shrink-0" />
+              <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 opacity-75 shrink-0" />
             )}
             <span className="hidden md:inline font-medium">Sound</span>
           </>
@@ -202,14 +202,14 @@ export default function AmbientSoundToggle({ variant = 'nav', className = '' }) 
         }}
         title="Sound Options & Volume"
         aria-label="Sound options and volume"
-        className="ml-1 p-1 text-[#78716C] dark:text-[#A8A29E] hover:text-[#C29B38] dark:hover:text-[#C29B38] transition-colors cursor-pointer"
+        className="ml-0.5 sm:ml-1 p-1 text-[#78716C] dark:text-[#A8A29E] hover:text-[#C29B38] dark:hover:text-[#C29B38] transition-colors cursor-pointer"
       >
         <Sliders className="w-3 h-3" />
       </button>
 
       {/* Popover for Sound Modes & Volume */}
       {showVolumeMenu && (
-        <div className="absolute right-0 top-full mt-2 z-50 w-52 p-3.5 bg-[#FAF8F5] dark:bg-[#1C1815] border border-[#1C1917]/15 dark:border-[#FAF8F5]/15 shadow-xl rounded-sm space-y-3">
+        <div className="absolute right-0 top-full mt-2 z-50 w-52 max-w-[calc(100vw-32px)] p-3.5 bg-[#FAF8F5] dark:bg-[#1C1815] border border-[#1C1917]/15 dark:border-[#FAF8F5]/15 shadow-xl rounded-sm space-y-3">
           {/* Sound Mode Switcher */}
           <div>
             <span className="text-[10px] tracking-wider uppercase text-[#78716C] dark:text-[#A8A29E] block mb-1.5 font-medium">

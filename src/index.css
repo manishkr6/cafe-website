@@ -33,6 +33,8 @@
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
   }
 
   html.dark, html.dark body {
@@ -50,6 +52,11 @@
   h1, h2, h3, h4, .font-serif {
     font-family: 'Cormorant Garamond', Garamond, Georgia, serif;
     letter-spacing: -0.01em;
+    overflow-wrap: break-word;
+  }
+
+  img, video, iframe {
+    max-width: 100%;
   }
 }
 

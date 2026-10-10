@@ -52,6 +52,12 @@ export default function Navbar({ onOpenEnquiry, isDark, toggleDark }) {
     };
   }, []);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
+
   const navLinks = [
     { label: 'HOME', to: '/', num: '01' },
     { label: 'STORY', to: '/story', num: '02' },
@@ -72,11 +78,12 @@ export default function Navbar({ onOpenEnquiry, isDark, toggleDark }) {
   return (
     <>
       <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${headerBgClass}`}>
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between">
           {/* Zone 1: Single text element wordmark */}
           <Link
             to="/"
-            className="font-serif text-2xl sm:text-3xl tracking-[0.08em] font-light hover:opacity-85 transition-opacity whitespace-nowrap"
+            onClick={scrollToTop}
+            className="font-serif text-xl xs:text-2xl sm:text-3xl tracking-[0.06em] sm:tracking-[0.08em] font-light hover:opacity-85 transition-opacity whitespace-nowrap shrink-0"
           >
             CAFÉ ZÉRO
           </Link>
@@ -89,6 +96,7 @@ export default function Navbar({ onOpenEnquiry, isDark, toggleDark }) {
                 <Link
                   key={link.to}
                   to={link.to}
+                  onClick={scrollToTop}
                   className={`relative py-1 transition-colors duration-200 ${
                     isActive
                       ? 'text-[#c29b38] font-semibold'
@@ -105,19 +113,17 @@ export default function Navbar({ onOpenEnquiry, isDark, toggleDark }) {
           </nav>
 
           {/* Zone 3: Actions */}
-          <div className="flex items-center gap-2 sm:gap-3.5">
+          <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-3.5">
             {/* Offline indicator */}
             {!isOnline && (
               <div
                 title="You are browsing offline."
-                className="flex items-center gap-1 text-[11px] uppercase text-amber-500 bg-amber-500/10 px-2 py-1 border border-amber-500/20"
+                className="flex items-center gap-1 text-[10px] sm:text-[11px] uppercase text-amber-500 bg-amber-500/10 px-1.5 sm:px-2 py-1 border border-amber-500/20"
               >
-                <WifiOff className="w-3.5 h-3.5" />
+                <WifiOff className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
                 <span className="hidden sm:inline">Offline</span>
               </div>
             )}
-
-
 
             {/* Ambient Sound Toggle (Accessible on all screens) */}
             <AmbientSoundToggle />
@@ -128,7 +134,7 @@ export default function Navbar({ onOpenEnquiry, isDark, toggleDark }) {
               type="button"
               aria-label={isDark ? "Switch to day/light mode" : "Switch to night/dark mode"}
               title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-              className="p-2.5 rounded-sm text-current hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-center"
+              className="p-1.5 sm:p-2.5 rounded-sm text-current hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-center"
             >
               {isDark ? (
                 <Sun className="w-4 h-4 text-amber-400 animate-spin-slow" />
@@ -150,7 +156,7 @@ export default function Navbar({ onOpenEnquiry, isDark, toggleDark }) {
               onClick={() => setMobileMenuOpen(true)}
               type="button"
               aria-label="Open navigation menu"
-              className="lg:hidden p-2.5 text-current hover:bg-black/5 dark:hover:bg-white/10 rounded-sm cursor-pointer"
+              className="lg:hidden p-1.5 sm:p-2.5 text-current hover:bg-black/5 dark:hover:bg-white/10 rounded-sm cursor-pointer"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -167,14 +173,17 @@ export default function Navbar({ onOpenEnquiry, isDark, toggleDark }) {
           aria-modal="true"
           aria-label="Mobile Navigation Menu"
           style={{ backgroundColor: isDark ? '#12100E' : '#FAF8F5' }}
-          className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto p-6 sm:p-8 text-[#1c1917] dark:text-[#faf8f5] transition-colors"
+          className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto min-h-[100dvh] p-5 sm:p-8 text-[#1c1917] dark:text-[#faf8f5] transition-colors"
         >
           {/* Top Bar inside Drawer */}
-          <div className="flex items-center justify-between pb-6 border-b border-[#1c1917]/10 dark:border-[#faf8f5]/15">
+          <div className="flex items-center justify-between pb-5 sm:pb-6 border-b border-[#1c1917]/10 dark:border-[#faf8f5]/15">
             <Link
               to="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="font-serif text-2xl tracking-[0.08em] font-light text-[#1c1917] dark:text-[#faf8f5]"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                scrollToTop();
+              }}
+              className="font-serif text-xl sm:text-2xl tracking-[0.08em] font-light text-[#1c1917] dark:text-[#faf8f5]"
             >
               CAFÉ ZÉRO
             </Link>
@@ -224,7 +233,10 @@ export default function Navbar({ onOpenEnquiry, isDark, toggleDark }) {
                   <Link
                     key={link.to}
                     to={link.to}
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      scrollToTop();
+                    }}
                     className="flex items-baseline justify-between py-2 border-b border-[#1c1917]/5 dark:border-[#faf8f5]/10 group"
                   >
                     <span

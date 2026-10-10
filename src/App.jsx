@@ -3,7 +3,7 @@
  * Gangtok, Sikkim, India
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
@@ -18,14 +18,58 @@ import Menu from './pages/Menu.jsx';
 import Gallery from './pages/Gallery.jsx';
 import Contact from './pages/Contact.jsx';
 import NotFound from './pages/NotFound.jsx';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Scroll to top on route change
+// Ensure browser does not remember and restore previous scroll positions on route change
+if (typeof window !== 'undefined' && window.history && 'scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual';
+}
+
+// Scroll to top immediately on route change
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, search, hash, key } = useLocation();
+
+  useLayoutEffect(() => {
+    // If navigating to an in-page anchor, handle it cleanly
+    if (hash) {
+      const el = document.querySelector(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
+
+    const resetToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    // Instant synchronous reset before paint
+    resetToTop();
+
+    // Reset GSAP ScrollTrigger state so old scroll positions are discarded
+    if (typeof window !== 'undefined') {
+      try {
+        ScrollTrigger.clearScrollMemory?.();
+        ScrollTrigger.refresh?.();
+      } catch (e) {
+        // Safe fallback
+      }
+    }
+
+    // Follow-up on next animation frame and brief delay to counter layout shifts from image/font loading
+    const rafId = requestAnimationFrame(resetToTop);
+    const timerId = setTimeout(resetToTop, 50);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(timerId);
+    };
+  }, [pathname, search, hash, key]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-
     // Dynamic SEO Titles per route
     const titleMap = {
       '/': 'CAFÉ ZÉRO · Specialty Coffee & Mountain Moments | Gangtok, Sikkim',
@@ -40,6 +84,7 @@ function ScrollToTop() {
 
   return null;
 }
+
 
 export default function App() {
   const [isDark, setIsDark] = useState(() => {

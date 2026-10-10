@@ -3,19 +3,24 @@ import { Link } from 'react-router-dom';
 import { siteConfig } from '../data/site.js';
 import { ArrowUpRight, MapPin, Phone, Mail, Clock, Sparkles } from 'lucide-react';
 import AmbientSoundToggle from './AmbientSoundToggle.jsx';
-
 export default function Footer({ onOpenEnquiry, onReplayLoader }) {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
+
   return (
-    <footer className="bg-[#1C1815] text-[#FAF8F5] pt-20 pb-12 border-t border-[#FAF8F5]/10">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+    <footer className="bg-[#1C1815] text-[#FAF8F5] pt-16 pb-28 sm:pt-20 sm:pb-12 border-t border-[#FAF8F5]/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
         {/* Top Editorial Row */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-[#FAF8F5]/10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 pb-12 sm:pb-16 border-b border-[#FAF8F5]/10">
           {/* Brand Col */}
-          <div className="md:col-span-5 space-y-6">
-            <h3 className="font-serif text-3xl sm:text-4xl font-light tracking-[0.05em] text-[#FAF8F5]">
+          <div className="md:col-span-5 space-y-5 sm:space-y-6">
+            <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light tracking-[0.05em] text-[#FAF8F5]">
               CAFÉ ZÉRO
             </h3>
-            <p className="font-serif italic text-lg text-[#FAF8F5]/70 max-w-sm">
+            <p className="font-serif italic text-base sm:text-lg text-[#FAF8F5]/70 max-w-sm">
               "Coffee, food & mountain moments."
             </p>
             <p className="text-xs text-[#FAF8F5]/60 leading-relaxed max-w-md font-light">
@@ -25,7 +30,7 @@ export default function Footer({ onOpenEnquiry, onReplayLoader }) {
             <div className="pt-2">
               <button
                 onClick={onOpenEnquiry}
-                className="text-xs tracking-[0.2em] uppercase text-[#C29B38] hover:text-[#FAF8F5] transition-colors border-b border-[#C29B38] pb-1 inline-flex items-center gap-1"
+                className="text-xs tracking-[0.2em] uppercase text-[#C29B38] hover:text-[#FAF8F5] transition-colors border-b border-[#C29B38] pb-1 inline-flex items-center gap-1 cursor-pointer"
               >
                 Reserve a Table <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
@@ -39,27 +44,27 @@ export default function Footer({ onOpenEnquiry, onReplayLoader }) {
             </span>
             <ul className="space-y-3 text-xs tracking-wider uppercase font-light">
               <li>
-                <Link to="/" className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
+                <Link to="/" onClick={scrollToTop} className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
                   01 · Home
                 </Link>
               </li>
               <li>
-                <Link to="/story" className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
+                <Link to="/story" onClick={scrollToTop} className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
                   02 · Our Story
                 </Link>
               </li>
               <li>
-                <Link to="/menu" className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
+                <Link to="/menu" onClick={scrollToTop} className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
                   03 · Curated Menu
                 </Link>
               </li>
               <li>
-                <Link to="/gallery" className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
+                <Link to="/gallery" onClick={scrollToTop} className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
                   04 · Photography Archive
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
+                <Link to="/contact" onClick={scrollToTop} className="text-[#FAF8F5]/80 hover:text-[#C29B38] transition-colors">
                   05 · Contact & Enquiries
                 </Link>
               </li>
@@ -100,7 +105,7 @@ export default function Footer({ onOpenEnquiry, onReplayLoader }) {
             </div>
 
             {/* Social channels */}
-            <div className="flex items-center gap-4 pt-3">
+            <div className="flex flex-wrap items-center gap-4 pt-3">
               <a
                 href={siteConfig.socials.instagram}
                 target="_blank"
@@ -130,9 +135,9 @@ export default function Footer({ onOpenEnquiry, onReplayLoader }) {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#FAF8F5]/40 font-light gap-4">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#FAF8F5]/40 font-light gap-4 text-center sm:text-left">
           <p>© 2026 Café Zéro. All rights reserved.</p>
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-6">
             <AmbientSoundToggle />
             <span>Gangtok · Sikkim · 5,800 ft</span>
             {onReplayLoader && (

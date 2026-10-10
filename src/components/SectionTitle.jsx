@@ -31,7 +31,7 @@ export default function SectionTitle({
         </div>
       )}
       <h2
-        className={`font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-[1.12] tracking-tight mb-4 text-balance ${
+        className={`font-serif text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-[1.12] tracking-tight mb-3 sm:mb-4 text-balance break-words ${
           isLight ? 'text-[#FAF8F5]' : 'text-[#1C1917] dark:text-[#FAF8F5]'
         }`}
       >

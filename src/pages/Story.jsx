@@ -163,7 +163,7 @@ export default function Story({ onOpenEnquiry }) {
           transitionTime
         );
       }
-    }, scrollSectionRef);
+    }, scrollSectionRef.current);
 
     return () => ctx.revert();
   }, [totalChapters]);
@@ -174,7 +174,7 @@ export default function Story({ onOpenEnquiry }) {
     const st = ScrollTrigger.getById('storyStickyScroll');
     if (st) {
       const scrollRange = st.end - st.start;
-      const targetY = st.start + (index / (totalChapters - 1)) * scrollRange;
+      const targetY = st.start + (index / (totalChapters - 1)) * Math.max(1, scrollRange - 6);
       window.scrollTo({ top: targetY + 2, behavior: 'smooth' });
     } else {
       setActiveChapter(index);
@@ -186,8 +186,8 @@ export default function Story({ onOpenEnquiry }) {
       {/* =========================================================================
           1. HERO HEADER: THE STORY ARCHIVE
          ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 mb-16 sm:mb-24">
-        <div className="max-w-3xl mb-10 sm:mb-12">
+      <section className="max-w-7xl mx-auto px-4 sm:px-8 mb-12 sm:mb-24">
+        <div className="max-w-3xl mb-8 sm:mb-12">
           <div className="flex items-center gap-2 mb-3 sm:mb-4 text-[#C29B38]">
             <span className="w-5 sm:w-6 h-[1px] bg-current"></span>
             <span className="text-[10px] sm:text-[11px] font-medium tracking-[0.25em] uppercase">Chronicle &amp; Craft</span>
@@ -202,15 +202,15 @@ export default function Story({ onOpenEnquiry }) {
             canvas where each chapter's narrative and photography crossfade together in the same viewport.
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-4 pt-1">
             <button
               onClick={() => goToChapter(0)}
-              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-[#2C241E] text-[#FAF8F5] dark:bg-[#FAF8F5] dark:text-[#1C1917] text-xs uppercase tracking-[0.2em] font-medium transition-all hover:bg-[#433830] cursor-pointer shadow-sm"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-[#2C241E] text-[#FAF8F5] dark:bg-[#FAF8F5] dark:text-[#1C1917] text-xs uppercase tracking-[0.18em] sm:tracking-[0.2em] font-medium transition-all hover:bg-[#433830] cursor-pointer shadow-sm"
             >
               Scroll The Story <ArrowDown className="w-3.5 h-3.5 animate-bounce" />
             </button>
 
-            <div className="flex items-center gap-2 px-3 py-1.5 border border-[#1C1917]/15 dark:border-[#FAF8F5]/15 text-xs text-[#78716C] dark:text-[#A8A29E]">
+            <div className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 border border-[#1C1917]/15 dark:border-[#FAF8F5]/15 text-xs text-[#78716C] dark:text-[#A8A29E]">
               <AmbientSoundToggle variant="nav" />
               <span className="text-[10px] sm:text-[11px] tracking-wider uppercase hidden sm:inline">
                 Mountain Ambience
@@ -232,8 +232,8 @@ export default function Story({ onOpenEnquiry }) {
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
-          <div className="absolute bottom-3 left-3 sm:bottom-6 sm:left-6 z-20 text-[#FAF8F5] space-y-1 max-w-[85%]">
-            <span className="text-[9px] sm:text-xs tracking-[0.25em] uppercase text-[#C29B38] font-mono block">
+          <div className="absolute bottom-2.5 left-2.5 sm:bottom-6 sm:left-6 z-20 text-[#FAF8F5] space-y-1 max-w-[90%]">
+            <span className="text-[9px] sm:text-xs tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#C29B38] font-mono block">
               Gangtok, Sikkim · 5,800 FT
             </span>
             <p className="font-serif text-sm sm:text-base md:text-xl font-light italic truncate">
@@ -244,15 +244,15 @@ export default function Story({ onOpenEnquiry }) {
       </section>
 
       {/* Altitude Stats Banner */}
-      <section className="bg-[#1C1815] text-[#FAF8F5] py-8 sm:py-12 border-y border-[#FAF8F5]/10 mb-10 sm:mb-16 overflow-hidden">
+      <section className="bg-[#1C1815] text-[#FAF8F5] py-6 sm:py-12 border-y border-[#FAF8F5]/10 mb-8 sm:mb-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-8 text-center">
             {siteConfig.stats.map((stat, idx) => (
               <div key={idx} className="space-y-1">
-                <div className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#C29B38] font-light">
+                <div className="font-serif text-xl xs:text-2xl sm:text-3xl md:text-4xl text-[#C29B38] font-light">
                   {stat.value}
                 </div>
-                <div className="text-[9px] sm:text-[11px] tracking-widest uppercase text-[#FAF8F5]/60 font-light truncate">
+                <div className="text-[8px] xs:text-[9px] sm:text-[11px] tracking-widest uppercase text-[#FAF8F5]/60 font-light truncate">
                   {stat.label}
                 </div>
               </div>
@@ -268,12 +268,12 @@ export default function Story({ onOpenEnquiry }) {
       <section
         ref={scrollSectionRef}
         className="relative w-full overflow-hidden"
-        style={{ height: `${totalChapters * 85}vh` }}
+        style={{ height: `${totalChapters * 80}vh` }}
       >
         {/* The Pinned Viewport Container (Locks in place while scrolling) */}
         <div
           ref={pinContainerRef}
-          className="w-full h-screen h-[100dvh] min-h-[520px] max-h-[960px] flex flex-col justify-between overflow-hidden bg-[#FAF8F5] dark:bg-[#12100E] border-y border-[#1C1917]/10 dark:border-[#FAF8F5]/10 px-3.5 sm:px-6 md:px-8 lg:px-12 py-3 sm:py-5 md:py-6 shadow-inner"
+          className="w-full h-screen h-[100dvh] min-h-0 sm:min-h-[520px] max-h-[960px] flex flex-col justify-between overflow-hidden bg-[#FAF8F5] dark:bg-[#12100E] border-y border-[#1C1917]/10 dark:border-[#FAF8F5]/10 px-3.5 sm:px-6 md:px-8 lg:px-12 py-2.5 sm:py-5 md:py-6 shadow-inner"
         >
           {/* Top Bar: Dynamic Chapter Tracking & Quick Chapter Jump Tabs */}
           <div className="w-full max-w-7xl mx-auto flex items-center justify-between pb-2 sm:pb-3 border-b border-[#1C1917]/10 dark:border-[#FAF8F5]/10 shrink-0 gap-2">
