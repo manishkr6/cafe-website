@@ -29,7 +29,7 @@ export default function Story({ onOpenEnquiry }) {
   const heroImageRef = useRef(null);
 
   const [activeChapter, setActiveChapter] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const progressBarRef = useRef(null);
 
   const chapterImages = [
     'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=85',
@@ -115,11 +115,13 @@ export default function Story({ onOpenEnquiry }) {
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
-            setScrollProgress(p);
-            // Calculate active chapter index with balanced distribution
+            if (progressBarRef.current) {
+              progressBarRef.current.style.width = `${Math.max(4, p * 100)}%`;
+            }
+            // Sync active chapter directly to timeline progress
             const idx = Math.min(
               totalChapters - 1,
-              Math.max(0, Math.floor(p * totalChapters * 0.999))
+              Math.floor(p * totalChapters)
             );
             setActiveChapter(idx);
           },
@@ -127,42 +129,49 @@ export default function Story({ onOpenEnquiry }) {
       });
 
       // 4. Orchestrated crossfades between text information and imagery
+      const duration = 0.6;
+
       for (let i = 0; i < totalChapters - 1; i++) {
         const curText = textSlidesRef.current[i];
         const nextText = textSlidesRef.current[i + 1];
         const curImg = imgSlidesRef.current[i];
         const nextImg = imgSlidesRef.current[i + 1];
 
-        // Transition starts at 60% of each chapter unit, lasting 40%
-        const transitionTime = i + 0.6;
-        const transitionDuration = 0.4;
+        // Transition centered around 1.0, 2.0, 3.0, 4.0
+        const transitionStart = i + 1;
+        const startTime = transitionStart - duration / 2;
 
         // Animate current chapter OUT (both text & image)
-        tl.to(
+        tl.fromTo(
           curText,
-          { autoAlpha: 0, y: -20, duration: transitionDuration, ease: 'power2.inOut', pointerEvents: 'none' },
-          transitionTime
+          { autoAlpha: 1, y: 0 },
+          { autoAlpha: 0, y: -20, duration, ease: 'power2.inOut', immediateRender: false, pointerEvents: 'none' },
+          startTime
         );
-        tl.to(
+        tl.fromTo(
           curImg,
-          { autoAlpha: 0, scale: 1.04, duration: transitionDuration, ease: 'power2.inOut' },
-          transitionTime
+          { autoAlpha: 1, scale: 1 },
+          { autoAlpha: 0, scale: 1.04, duration, ease: 'power2.inOut', immediateRender: false },
+          startTime
         );
 
         // Animate next chapter IN simultaneously (both text & image)
         tl.fromTo(
           nextText,
-          { autoAlpha: 0, y: 25, pointerEvents: 'none' },
-          { autoAlpha: 1, y: 0, duration: transitionDuration, ease: 'power2.out', pointerEvents: 'auto' },
-          transitionTime
+          { autoAlpha: 0, y: 25 },
+          { autoAlpha: 1, y: 0, duration, ease: 'power2.inOut', immediateRender: false, pointerEvents: 'auto' },
+          startTime
         );
         tl.fromTo(
           nextImg,
-          { autoAlpha: 0, scale: 0.96 },
-          { autoAlpha: 1, scale: 1.0, duration: transitionDuration, ease: 'power2.out' },
-          transitionTime
+          { autoAlpha: 0, scale: 0.95 },
+          { autoAlpha: 1, scale: 1.0, duration, ease: 'power2.inOut', immediateRender: false },
+          startTime
         );
       }
+      
+      // Ensure the timeline total duration aligns with chapters
+      tl.set({}, {}, totalChapters);
     }, scrollSectionRef.current);
 
     return () => ctx.revert();
@@ -268,7 +277,7 @@ export default function Story({ onOpenEnquiry }) {
       <section
         ref={scrollSectionRef}
         className="relative w-full overflow-hidden"
-        style={{ height: `${totalChapters * 80}vh` }}
+        style={{ height: `${totalChapters * 60}vh` }}
       >
         {/* The Pinned Viewport Container (Locks in place while scrolling) */}
         <div
@@ -310,8 +319,9 @@ export default function Story({ onOpenEnquiry }) {
           {/* Golden Dynamic Progress Line */}
           <div className="w-full max-w-7xl mx-auto h-[2px] bg-[#1C1917]/10 dark:bg-[#FAF8F5]/10 mt-1 mb-2 sm:mb-3.5 overflow-hidden shrink-0">
             <div
-              className="h-full bg-[#C29B38] transition-all duration-200 ease-out"
-              style={{ width: `${Math.max(4, scrollProgress * 100)}%` }}
+              ref={progressBarRef}
+              className="h-full bg-[#C29B38] transition-none"
+              style={{ width: `4%` }}
             />
           </div>
 

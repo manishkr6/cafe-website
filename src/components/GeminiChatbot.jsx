@@ -214,34 +214,60 @@ export default function GeminiChatbot() {
 
       // If server has no key or returned 503, use local knowledge engine
       const fallback = generateHostResponse(text);
+      
+      // Simulate network delay
       setTimeout(() => {
+        setLoading(false);
+        const messageId = 'msg-' + Date.now();
+        
+        // Add empty message placeholder
         setMessages((prev) => [
           ...prev,
           {
+            id: messageId,
             role: 'model',
-            text: fallback.text,
+            text: '',
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            recommendedItem: fallback.recommendedItem,
-            hasReservationAction: fallback.hasReservationAction
+            recommendedItem: null,
+            hasReservationAction: false,
+            isTyping: true
           }
         ]);
-        setLoading(false);
-      }, 400);
+        
+        // Simulate streaming chunks
+        const fullText = fallback.text;
+        let currentIndex = 0;
+        
+        const streamInterval = setInterval(() => {
+          // Add 2-4 characters per tick to simulate natural typing
+          currentIndex += Math.floor(Math.random() * 3) + 2;
+          const currentText = fullText.slice(0, currentIndex);
+          
+          setMessages((prev) => 
+            prev.map((m) => 
+              m.id === messageId ? { ...m, text: currentText } : m
+            )
+          );
+          
+          if (currentIndex >= fullText.length) {
+            clearInterval(streamInterval);
+            // Append interactive widgets once typing finishes
+            setMessages((prev) => 
+              prev.map((m) => 
+                m.id === messageId ? { 
+                  ...m, 
+                  text: fullText, 
+                  recommendedItem: fallback.recommendedItem,
+                  hasReservationAction: fallback.hasReservationAction,
+                  isTyping: false
+                } : m
+              )
+            );
+          }
+        }, 15);
+      }, 500);
     } catch {
-      const fallback = generateHostResponse(text);
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: 'model',
-            text: fallback.text,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            recommendedItem: fallback.recommendedItem,
-            hasReservationAction: fallback.hasReservationAction
-          }
-        ]);
-        setLoading(false);
-      }, 350);
+      setLoading(false);
     }
   };
 
@@ -250,6 +276,28 @@ export default function GeminiChatbot() {
       e.preventDefault();
       handleSend();
     }
+  };
+
+  const renderFormattedText = (text, isTyping) => {
+    if (!text) return isTyping ? <span className="inline-block w-1.5 h-3.5 ml-1 bg-[#C29B38] animate-pulse align-middle" /> : null;
+    
+    // Split by markdown bold syntax
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return (
+      <>
+        {parts.map((part, i) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return <strong key={i} className="font-semibold text-[#C29B38]">{part.slice(2, -2)}</strong>;
+          }
+          // Handle unfinished bold tags during streaming
+          if (part.startsWith('**') && isTyping && i === parts.length - 1) {
+             return <strong key={i} className="font-semibold text-[#C29B38]">{part.slice(2)}</strong>;
+          }
+          return <span key={i}>{part}</span>;
+        })}
+        {isTyping && <span className="inline-block w-1.5 h-3.5 ml-1 bg-[#C29B38] animate-pulse align-middle" />}
+      </>
+    );
   };
 
   return (
@@ -363,47 +411,17 @@ export default function GeminiChatbot() {
             </div>
           </div>
 
-          {/* Quick Inquiries (Shown on fresh desk) */}
-          {messages.length <= 2 && (
-            <div className="p-3 sm:p-3.5 bg-[#F3EFEA] dark:bg-[#1E1916] border-b border-[#1C1917]/10 dark:border-[#FAF8F5]/10 shrink-0">
-              <span className="text-[9px] font-mono tracking-[0.2em] uppercase text-[#78716C] dark:text-[#A8A29E] block mb-2">
-                Quick Inquiries · Tap to Ask
-              </span>
-              <div className="grid grid-cols-1 xs:grid-cols-2 gap-2">
-                {QUICK_INQUIRIES.map((item, idx) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => handleSend(item.query)}
-                      className="text-left p-2.5 bg-white/70 dark:bg-[#14110F]/70 border border-[#1C1917]/10 dark:border-[#FAF8F5]/10 hover:border-[#C29B38] transition-all rounded-xs group cursor-pointer"
-                    >
-                      <div className="flex items-center gap-1.5 text-[#C29B38] mb-0.5">
-                        <Icon className="w-3 h-3" />
-                        <span className="text-[10px] font-medium tracking-wide text-[#1C1917] dark:text-[#FAF8F5] truncate">
-                          {item.title}
-                        </span>
-                      </div>
-                      <p className="text-[9px] text-[#78716C] dark:text-[#A8A29E] line-clamp-1 font-light">
-                        {item.desc}
-                      </p>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+
 
           {/* Messages Stream */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5 text-xs font-light">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-5 text-xs font-light">
             {messages.map((msg, idx) => {
               const isGuest = msg.role === 'user';
               return (
-                <div
-                  key={msg.id || idx}
-                  className={`flex flex-col ${isGuest ? 'items-end' : 'items-start'} space-y-1.5 animate-fadeIn`}
-                >
+                <React.Fragment key={msg.id || idx}>
+                  <div
+                    className={`flex flex-col ${isGuest ? 'items-end' : 'items-start'} space-y-1.5 animate-fadeIn`}
+                  >
                   <div className="flex items-center gap-2 px-1 text-[9px] text-[#78716C] dark:text-[#A8A29E] font-mono uppercase tracking-wider">
                     {!isGuest ? (
                       <span className="flex items-center gap-1.5">
@@ -430,7 +448,7 @@ export default function GeminiChatbot() {
                     }`}
                   >
                     <div className="whitespace-pre-line text-xs sm:text-[13px] font-light leading-relaxed">
-                      {msg.text}
+                      {renderFormattedText(msg.text, msg.isTyping)}
                     </div>
 
                     {/* Rich Interactive Action: Embedded Menu Item Card */}
@@ -480,8 +498,41 @@ export default function GeminiChatbot() {
                     )}
                   </div>
                 </div>
-              );
-            })}
+
+                {/* Inline Quick Inquiries (Shown on fresh desk after first AI greeting) */}
+                {idx === 0 && messages.length <= 2 && (
+                  <div className="pt-2 animate-fadeIn w-full max-w-[95%] sm:max-w-[90%]">
+                    <span className="text-[9px] font-mono tracking-[0.2em] uppercase text-[#78716C] dark:text-[#A8A29E] block mb-2 px-1">
+                      Quick Inquiries · Tap to Ask
+                    </span>
+                    <div className="grid grid-cols-1 xs:grid-cols-2 gap-2">
+                      {QUICK_INQUIRIES.map((item, i) => {
+                        const Icon = item.icon;
+                        return (
+                          <button
+                            key={i}
+                            type="button"
+                            onClick={() => handleSend(item.query)}
+                            className="text-left p-2.5 bg-white/50 dark:bg-[#1E1916]/50 border border-[#1C1917]/10 dark:border-[#FAF8F5]/10 hover:border-[#C29B38] transition-all rounded-xs group cursor-pointer"
+                          >
+                            <div className="flex items-center gap-1.5 text-[#C29B38] mb-0.5">
+                              <Icon className="w-3 h-3" />
+                              <span className="text-[10px] font-medium tracking-wide text-[#1C1917] dark:text-[#FAF8F5] truncate">
+                                {item.title}
+                              </span>
+                            </div>
+                            <p className="text-[9px] text-[#78716C] dark:text-[#A8A29E] line-clamp-1 font-light">
+                              {item.desc}
+                            </p>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </React.Fragment>
+            );
+          })}
 
             {/* In-service typing / thought indicator */}
             {loading && (
